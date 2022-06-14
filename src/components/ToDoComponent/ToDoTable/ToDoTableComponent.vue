@@ -1,9 +1,9 @@
 <template>
   <div class="todo__table">
-    <to-do-table-input-component v-on:addTask="addTask($event)" />
-    <tasks-view-component v-if="statusWindow.actTaskShow" :tasks-list="active" v-on:checkedTask="checkedTask($event)"/>
-    <tasks-view-component v-if="statusWindow.compTaskShow" :tasks-list="completed"/>
-
+    <to-do-table-input-component v-on:addTask="addTask($event)" :input-show="showInput()"/>
+    <tasks-view-component v-if="statusWindow.actTaskShow" :tasks-list="active" v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
+    <tasks-view-component v-if="statusWindow.compTaskShow" :tasks-list="completed" v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
+    <tasks-view-component v-if="statusWindow.delTaskShow" :tasks-list="deleted" :check-show="showInput()"/>
   </div>
 
 </template>
@@ -27,7 +27,7 @@ export default {
       completed: [],
       deleted:[],
       btn:{
-        act: false,
+        act: true,
         comp: false,
         del: false
       }
@@ -45,21 +45,34 @@ export default {
         this.btn.comp = true
         this.$emit('btn', this.btn)
       }
+    },
+    deleted(newVal) {
+      if (newVal) {
+        this.btn.del = true
+        this.$emit('btn', this.btn)
+      }
     }
+
   },
+
   methods: {
     addTask (event) {
       this.active.push({text:event, id:Date.now(), status:'active'})
     },
-    checkedTask(event) {
-      this.active = this.active.filter(el => {
-        if (el.id !== event){
-          return el
-        } else {
-          el.status = 'completed'
-          this.completed.push(el)
-        }
-      })
+    checkedTask(ind, toPush, arr) {
+        this[arr] = this[arr].filter(el => {
+          if (el.id !== ind){
+            return el
+          } else {
+            el.status = toPush
+            this[toPush].push(el)
+          }
+        })
+    },
+    showInput() {
+      if (this.statusWindow.actTaskShow === true) return 'act';
+      if (this.statusWindow.compTaskShow === true) return 'comp';
+      if (this.statusWindow.delTaskShow === true) return 'del'
     }
 
 
@@ -69,10 +82,10 @@ export default {
 
 <style scoped>
 .todo__table {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 20px;
   width: 75%;
   height: 100%;
 

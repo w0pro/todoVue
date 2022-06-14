@@ -1,9 +1,14 @@
 <template>
   <ul class="tasks__view">
     <li v-for="item in tasksList" :key="item.id" class="task__item">
-      <input type="checkbox" :id="item.id" :value="item.text"  @change="$emit('checkedTask', item.id)">
+      <input class="custom-checkbox" type="checkbox" v-if="statusInput" :id="item.id" :value="item.text"  @change="$emit('checkedTask', item.id, 'completed', 'active')" >
       <label :for="item.id"></label>
       <span>{{item.text}}</span>
+      <button class="btn-del" @click="$emit('checkedTask', item.id, 'deleted', 'completed')" v-if="statusBtn">
+        <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.66667 3.33333L6.25 1H9.75L10.3333 3.33333M15 3.33333H2.16667L3.33333 17.3333H12.6667L13.8333 3.33333H1H15ZM8 6.83333V13.8333V6.83333ZM10.9167 6.83333L10.3333 13.8333L10.9167 6.83333ZM5.08333 6.83333L5.66667 13.8333L5.08333 6.83333Z" stroke="#FF0000" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
     </li>
   </ul>
 
@@ -12,36 +17,86 @@
 <script>
 export default {
   name: "TasksViewComponent",
-
   props: {
-    tasksList: Array
+    tasksList: Array,
+    checkShow: String
+  },
+
+  watch: {
+    checkShow(newVal) {
+      if (newVal === 'comp') {
+        this.statusInput = false
+        this.statusBtn = true
+      } else if (newVal === 'del') {
+        this.statusInput = false
+        this.statusBtn = false
+      } else {
+        this.statusInput = true
+        this.statusBtn = false
+      }
+    }
   },
 
   data() {
     return {
-
+        statusInput: true,
+        statusBtn: false
     }
   },
-  methods: {
-
-  }
 }
 </script>
 
 <style scoped>
 .tasks__view {
- align-self: baseline;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  top: 20%;
+  width: 85%;
+  overflow-y: scroll;
+  padding-left: 0!important;
 }
 
 .task__item {
+  display: flex;
+  align-items: center;
   list-style: none;
   padding: 15px;
-  width: 80%;
-  background-color: #a9a8a7;
-  margin-bottom: 10px;
   border-radius: 10px;
 }
+
+.btn-del {
+  align-self: flex-end;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.custom-checkbox+label::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  flex-grow: 0;
+  border: 1px solid #EA5959;
+  border-radius: 0.25em;
+  margin-right: 0.5em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 50% 50%;
+}
+
+.custom-checkbox:not(:disabled):active+label::before {
+  background-color: #EA5959;
+  border-color: #EA5959;
+}
+
 
 
 </style>

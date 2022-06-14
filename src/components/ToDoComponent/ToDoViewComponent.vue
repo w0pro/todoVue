@@ -27,7 +27,7 @@ export default {
 
   methods: {
     seeBtn(event) {
-      this.btn =event;
+      this.btn = event;
     },
     showStatus(event){
       for (let key in this.statusWindow) {
@@ -47,6 +47,7 @@ export default {
   display: flex;
   width: 70%;
   height: 70%;
+  min-width: 400px;
   background-color: #E5E5E5;
   border-radius: 10px;
 }
