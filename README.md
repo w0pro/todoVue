@@ -1,3 +1,5 @@
+deploy https://spectacular-fenglisu-d8fc29.netlify.app/
+
 # todo
 
 ## Project setup
