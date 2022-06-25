@@ -37,18 +37,21 @@ export default {
   align-items: center;
 }
 .button__categories {
+  font-family: 'Inconsolata', monospace;
+  color: white;
   max-width: 200px;
   width: 50%;
   min-width: 50px;
-  padding: 5px;
+  padding: 10px 10px;
   border: none;
   border-radius: 10px;
-  background-color: #EA5959;
+  background-color: rgba(42, 147, 116, 0.4);
   cursor: pointer;
 }
 
 .button__categories:active {
-  background-color: #07f69c;
+  color: black;
+  background-color: #c0bbc5;
 }
 
 </style>

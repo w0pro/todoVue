@@ -19,7 +19,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #EA5959;
+  background-color: #d7b4a9;
   width: 100%;
   height: 100vh;
 }

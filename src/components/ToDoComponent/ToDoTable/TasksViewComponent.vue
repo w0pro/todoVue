@@ -10,6 +10,7 @@
         </svg>
       </button>
     </li>
+
   </ul>
 
 </template>
@@ -30,6 +31,7 @@ export default {
       } else if (newVal === 'del') {
         this.statusInput = false
         this.statusBtn = false
+        this.statusClear = true
       } else {
         this.statusInput = true
         this.statusBtn = false
@@ -40,7 +42,8 @@ export default {
   data() {
     return {
         statusInput: true,
-        statusBtn: false
+        statusBtn: false,
+        statusClear: false
     }
   },
 }
@@ -57,15 +60,17 @@ export default {
 }
 
 .task__item {
+  font-family: 'Inconsolata', monospace;
+  position: relative;
   display: flex;
-  align-items: center;
   list-style: none;
   padding: 15px;
   border-radius: 10px;
 }
 
 .btn-del {
-  align-self: flex-end;
+  position: absolute;
+  right: 0;
   background-color: transparent;
   border: none;
   cursor: pointer;

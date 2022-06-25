@@ -1,6 +1,6 @@
 <template>
-  <div class="table-input" v-if="showInput()">
-    <input type="text" class="input" v-model.trim="inputTask" :placeholder="placeholder">
+  <div class="table-input" >
+    <input type="text" class="input" v-model.trim="inputTask" :placeholder="placeholder" @change="taskTransfer" >
     <button class="btn-add" @click="taskTransfer">Add</button>
   </div>
 
@@ -30,12 +30,12 @@ export default {
         setTimeout(() => this.placeholder = 'Add a new task insdie ‘All’ category', 1000)
       }
     },
-    showInput() {
-      if (this.inputShow === 'act') {
-        return true
-      }
-      return false
-    }
+    // showInput() {
+    //   if (this.inputShow === 'act') {
+    //     return true
+    //   }
+    //   return false
+    // }
   }
 }
 </script>
@@ -49,6 +49,7 @@ export default {
   height: 40px;
 }
 .input {
+  font-family: 'Inconsolata', monospace;
   padding: 5px;
   width: calc(100% - 8px);
   border-radius: 10px;
@@ -62,14 +63,18 @@ export default {
 }
 
 .btn-add {
+  font-family: 'Inconsolata', monospace;
+  color: white;
+  padding: 0 20px;
   border: none;
   border-radius: 10px;
-  background-color: #07f69c;
+  background-color: #81776f;
   cursor: pointer;
 }
 
 .btn-add:active {
-  background-color: #EA5959;
+  color: black;
+  background-color: #c0bbc5;
 }
 
 </style>
