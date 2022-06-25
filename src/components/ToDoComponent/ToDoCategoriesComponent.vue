@@ -39,9 +39,11 @@ export default {
 .button__categories {
   font-family: 'Inconsolata', monospace;
   color: white;
+  font-size: 16px;
+  line-height: 1em;
   max-width: 200px;
   width: 50%;
-  min-width: 50px;
+  min-width: 80px;
   padding: 10px 10px;
   border: none;
   border-radius: 10px;

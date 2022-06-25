@@ -47,7 +47,7 @@ export default {
   display: flex;
   width: 70%;
   height: 70%;
-  min-width: 400px;
+  min-width: 350px;
   background-color: #E5E5E5;
   border-radius: 10px;
 }

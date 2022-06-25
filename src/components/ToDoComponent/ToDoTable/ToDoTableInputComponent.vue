@@ -1,6 +1,6 @@
 <template>
   <div class="table-input" >
-    <input type="text" class="input" v-model.trim="inputTask" :placeholder="placeholder" @change="taskTransfer" >
+    <input type="text" class="input" v-model.trim.lazy="inputTask" :placeholder="placeholder" @change="taskTransfer" >
     <button class="btn-add" @click="taskTransfer">Add</button>
   </div>
 
