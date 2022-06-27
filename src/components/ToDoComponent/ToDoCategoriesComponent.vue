@@ -14,8 +14,12 @@ export default {
   name: "ToDoCategories",
 
   props: {
-    btn: Object
+    btn: Object,
+    activeTasks:{
+      type: Array
+    }
   },
+
 }
 </script>
 

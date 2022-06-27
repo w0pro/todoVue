@@ -1,8 +1,10 @@
 <template>
   <div class="todo__table">
     <to-do-table-input-component v-on:addTask="addTask($event)" :input-show="showInput()"/>
-    <tasks-view-component v-if="statusWindow.actTaskShow" :tasks-list="active" v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
-    <tasks-view-component v-if="statusWindow.compTaskShow" :tasks-list="completed" v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
+    <tasks-view-component v-if="statusWindow.actTaskShow" :tasks-list="active"
+                          v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
+    <tasks-view-component v-if="statusWindow.compTaskShow" :tasks-list="completed"
+                          v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
     <tasks-view-component v-if="statusWindow.delTaskShow" :tasks-list="deleted" :check-show="showInput()"/>
     <button class="btn-clear" v-if="showBtnClear()" @click="clearList">Clear list</button>
   </div>
@@ -12,11 +14,12 @@
 <script>
 import ToDoTableInputComponent from "@/components/ToDoComponent/ToDoTable/ToDoTableInputComponent";
 import TasksViewComponent from "@/components/ToDoComponent/ToDoTable/TasksViewComponent";
+
 export default {
   name: "ToDoTableComponent",
   components: {TasksViewComponent, ToDoTableInputComponent},
 
-  props:{
+  props: {
     statusWindow: {
       type: Object
     }
@@ -26,8 +29,8 @@ export default {
     return {
       active: [],
       completed: [],
-      deleted:[],
-      btn:{
+      deleted: [],
+      btn: {
         act: false,
         comp: false,
         del: false,
@@ -37,21 +40,21 @@ export default {
   },
 
   mounted() {
-    if (localStorage.getItem('active').length !== 2) {
+    if (localStorage.getItem('active') !== null) {
       this.active = JSON.parse(localStorage.getItem('active'))
     }
-    if (localStorage.getItem('completed').length !== 2 ) {
+    if (localStorage.getItem('completed') !== null) {
       this.completed = JSON.parse(localStorage.getItem('completed'))
     }
-    if (localStorage.getItem('deleted').length !== 2) {
+    if (localStorage.getItem('deleted') !== null) {
       this.deleted = JSON.parse(localStorage.getItem('deleted'))
     }
   },
-  watch:{
+  watch: {
     active(newVal) {
       if (newVal.length !== 0) {
         this.btn.act = true
-        this.$emit('btn', this.btn)
+        this.$emit('btn', this.btn, this.active)
       } else {
         this.btn.act = false
       }
@@ -59,7 +62,7 @@ export default {
     completed(newVal) {
       if (newVal.length !== 0) {
         this.btn.comp = true
-        this.$emit('btn', this.btn)
+        this.$emit('btn', this.btn,)
       } else {
         this.btn.comp = false
       }
@@ -77,26 +80,37 @@ export default {
   },
 
   methods: {
-    addTask (event) {
-      this.active.push({text:event, id:Date.now(), status:'active'})
+    addTask(event) {
+      console.log(event)
+      this.active.push({
+        text: event.inputTask,
+        id: Date.now(),
+        status: 'active',
+        categoriaName: event.categoriaData.name,
+        color: event.categoriaData.color
+      })
       this.updateLocal('active')
     },
     checkedTask(ind, toPush, arr) {
-        this[arr] = this[arr].filter(el => {
-          if (el.id !== ind){
-            return el
-          } else {
-            el.status = toPush
-            this[toPush].push(el)
-          }
-        })
+      this[arr] = this[arr].filter(el => {
+        if (el.id !== ind) {
+          return el
+        } else {
+          el.status = toPush
+          this[toPush].push(el)
+        }
+      })
       this.updateLocal(arr)
       this.updateLocal(toPush)
     },
     showInput() {
-      if (this.statusWindow.actTaskShow === true) return 'act';
-      if (this.statusWindow.compTaskShow === true) return 'comp';
-      if (this.statusWindow.delTaskShow === true) return 'del'
+      if (this.statusWindow.actTaskShow) {
+        return 'act';
+      } else if (this.statusWindow.compTaskShow) {
+        return 'comp';
+      } else {
+        return 'del'
+      }
     },
 
     updateLocal(arg) {
@@ -106,7 +120,7 @@ export default {
       this.deleted = [];
       this.updateLocal('deleted');
     },
-    showBtnClear () {
+    showBtnClear() {
       if (this.statusWindow.delTaskShow && this.deleted.length !== 0) {
         return true
       } else {
@@ -120,6 +134,10 @@ export default {
 </script>
 
 <style scoped>
+* {
+  padding: 0;
+}
+
 .todo__table {
   position: relative;
   display: flex;
@@ -140,6 +158,7 @@ export default {
   background-color: #c53939;
   padding: 10px 10px;
   border: none;
+  cursor: pointer;
 }
 
 .btn-clear:active {
