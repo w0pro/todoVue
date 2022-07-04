@@ -1,9 +1,9 @@
 <template>
   <div class="todo__categories">
     <div class="categories__wrapper">
-      <button class="button__categories" v-if="btn.act" @click="$emit('showStatus', 'actTaskShow')">Active</button>
-      <button class="button__categories" v-if="btn.comp" @click="$emit('showStatus', 'compTaskShow')">Completed</button>
-      <button class="button__categories" v-if="btn.del" @click="$emit('showStatus', 'delTaskShow')">Deleted</button>
+      <button class="button__categories" v-if="getTasks.active.length !== 0" @click="switchWindow('actTaskShow')">Active</button>
+      <button class="button__categories" v-if="getTasks.completed.length !== 0" @click="switchWindow('compTaskShow')">Completed</button>
+      <button class="button__categories" v-if="getTasks.deleted.length !== 0" @click="switchWindow('delTaskShow')">Deleted</button>
     </div>
   </div>
 
@@ -12,13 +12,16 @@
 <script>
 export default {
   name: "ToDoCategories",
-
-  props: {
-    btn: Object,
-    activeTasks:{
-      type: Array
+  computed:{
+    getTasks() {
+      return this.$store.getters.getTasks
     }
   },
+  methods: {
+    switchWindow(arg) {
+      this.$store.commit('switchWindow', arg)
+    }
+  }
 
 }
 </script>

@@ -1,18 +1,18 @@
 <template>
-  <div class="context-menu" v-if="showContext">
-    <div>
-      <p>Enter the category name</p>
+  <div class="fix context-menu" v-if="showContext">
+    <div class="fix">
+      <p class="fix">Enter the category name</p>
       <input type="text" v-model="categoria.name">
     </div>
-    <div>
-      <ul>
+    <div class="fix">
+      <ul class="fix">
         <li v-for="value in colors" :key="value">
-          <div class="color-block" :style="{background:value}" @click="whatColor($event)"></div>
+          <div class="fix color-block" :style="{background:value}" @click="whatColor($event)"></div>
         </li>
       </ul>
     </div>
     <div>
-      <button @click="transferCategoria"></button>
+      <button class="fix" @click="transferCategoria">add Cathegoria</button>
     </div>
   </div>
 </template>
@@ -20,6 +20,8 @@
 <script>
 export default {
   name: "InputContextMenu",
+
+
   props : {
     showContext: {
       type: Boolean
@@ -48,9 +50,10 @@ export default {
 
     },
     transferCategoria() {
-      this.$emit('transferCategoria', this.categoria)
-      // this.categoria.color = '',
-      // this.categoria.name = ''
+      this.$store.commit('transferCategoria', this.categoria)
+
+      this.categoria.color = '',
+      this.categoria.name = ''
     }
   }
 

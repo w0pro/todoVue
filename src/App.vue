@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <to-do-view-component />
+  <div id="app" @click="eventCloseContext">
+    <to-do-view-component/>
   </div>
 </template>
 
@@ -11,6 +11,14 @@ import ToDoViewComponent from "@/components/ToDoComponent/ToDoViewComponent";
 export default {
   name: 'App',
   components: {ToDoViewComponent},
+  methods : {
+    eventCloseContext(event) {
+      if (event.target.tagName !== 'svg' && event.target.tagName !== 'INPUT' && event.target.classList[0] !== 'fix') {
+        this.$store.commit('eventCloseContext')
+      }
+
+    }
+  }
 }
 </script>
 

@@ -1,12 +1,12 @@
 <template>
   <div class="table-input" >
     <input :id="inputcrop" type="text" class="input" v-model.trim.lazy="newTask.inputTask" :placeholder="placeholder" v-on:keyup.enter="taskTransfer" >
-    <label :for="inputcrop" class="btn-add-context" @click="showMenu($event)">
-      <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+    <label :for="inputcrop" class="btn-add-context" @click="showMenu">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" >
         <path d="M128,26A102,102,0,1,0,230,128,102.1153,102.1153,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.10217,90.10217,0,0,1,128,218Zm10-90a10,10,0,1,1-10-10A10.01146,10.01146,0,0,1,138,128Zm48,0a10,10,0,1,1-10-10A10.01177,10.01177,0,0,1,186,128Zm-96,0a10,10,0,1,1-10-10A10.01146,10.01146,0,0,1,90,128Z" fill="#81776f"/>
       </svg>
     </label>
-    <input-context-menu :show-context="showContext" v-on:transferCategoria="addCategoria($event)"/>
+    <input-context-menu :show-context="showContext"/>
     <button class="btn-add" @click="taskTransfer">Add</button>
   </div>
 
@@ -19,15 +19,19 @@ import InputContextMenu from "@/components/ToDoComponent/ToDoTable/TodoInputCont
 export default {
   name: "ToDoTableInputComponent",
   components: {InputContextMenu},
+  computed: {
+    statusContext(){
+      return this.$store.getters.statusContext
+    }
+  },
   props: {
-    inputShow: String
+    inputShow: String,
   },
 
   data () {
     return {
       newTask: {
         inputTask : '',
-        categoriaData: {},
       },
       inputcrop: '1',
       placeholder: 'Add a new task insdie ‘All’ category',
@@ -35,35 +39,37 @@ export default {
     }
   },
 
+  watch: {
+    statusContext(newVal) {
+      this.showContext = newVal
+    }
+  },
+
+
+
 
   methods: {
     taskTransfer () {
       if (this.newTask.inputTask) {
-        this.$emit('addTask', this.newTask)
+        this.$store.commit('addParamActive', {
+          text: this.newTask.inputTask,
+          id: Date.now(),
+          status: 'active',
+        } )
+        this.$store.commit('updateLocal', 'active')
         this.newTask.inputTask = '';
       } else {
         setTimeout(() => this.placeholder = 'You cannot add an empty task!!!', 300)
         setTimeout(() => this.placeholder = 'Add a new task insdie ‘All’ category', 1000)
       }
     },
-    showMenu(e) {
-      console.log(e)
-      this.showContext = !this.showContext;
-    },
-    addCategoria (event) {
-      this.newTask.categoriaData = event
+    showMenu(event) {
+      if (event.target.tagName === 'svg') {
+        this.showContext = !this.showContext
+        this.$store.commit('eventOpenContext')
+      }
     },
   },
-  //
-  // mounted () {
-  //   this.$emit('click', this.showMenu)
-  //
-  // },
-  // beforeDestroy () {
-  //   this.$off('click',this.showMenu)
-  // }
-
-
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="todo">
-    <to-do-categories :btn="btn" :active-tasks="activeTasksData" v-on:showStatus="showStatus($event)"/>
-    <to-do-table-component v-on:btn="seeBtn(...arguments)" :status-window="statusWindow"/>
+    <to-do-categories/>
+    <to-do-table-component/>
 
   </div>
 
@@ -14,33 +14,9 @@ export default {
   name: "ToDoViewComponent",
   components: {ToDoTableComponent, ToDoCategories},
 
-  data() {
-    return {
-      btn: {},
-      statusWindow: {
-        actTaskShow: true,
-        compTaskShow: false,
-        delTaskShow: false
-      },
-      activeTasksData: []
-    }
-  },
 
-  methods: {
-    seeBtn(btn, activeTask) {
-      this.activeTasksData = activeTask;
-      this.btn = btn;
-    },
-    showStatus(event){
-      for (let key in this.statusWindow) {
-        if (key === event) {
-          this.statusWindow[key] = true
-        } else {
-          this.statusWindow[key] = false
-        }
-      }
-    }
-  }
+
+
 }
 </script>
 

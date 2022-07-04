@@ -1,12 +1,12 @@
 <template>
   <div class="todo__table">
-    <to-do-table-input-component v-on:addTask="addTask($event)" :input-show="showInput()"/>
-    <tasks-view-component v-if="statusWindow.actTaskShow" :tasks-list="active"
-                          v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
-    <tasks-view-component v-if="statusWindow.compTaskShow" :tasks-list="completed"
-                          v-on:checkedTask="checkedTask( ...arguments)" :check-show="showInput()"/>
-    <tasks-view-component v-if="statusWindow.delTaskShow" :tasks-list="deleted" :check-show="showInput()"/>
-    <button class="btn-clear" v-if="showBtnClear()" @click="clearList">Clear list</button>
+    <to-do-table-input-component :input-show="showInput()"/>
+    <tasks-view-component v-if="getStatusWindow.actTaskShow" :tasks-list="getTasks.active"
+                           :check-show="showInput()"/>
+    <tasks-view-component v-if="getStatusWindow.compTaskShow" :tasks-list="getTasks.completed"
+                          :check-show="showInput()"/>
+    <tasks-view-component v-if="getStatusWindow.delTaskShow" :tasks-list="getTasks.deleted" :check-show="showInput()"/>
+    <button class="btn-clear" v-if="getTasks.deleted.length !== 0" @click="clearList">Clear list</button>
   </div>
 
 </template>
@@ -19,116 +19,44 @@ export default {
   name: "ToDoTableComponent",
   components: {TasksViewComponent, ToDoTableInputComponent},
 
-  props: {
-    statusWindow: {
-      type: Object
+  computed: {
+    getTasks() {
+      return this.$store.getters.getTasks
+    },
+    getStatusWindow() {
+      return this.$store.getters.getStatusWindow
     }
   },
 
-  data() {
-    return {
-      active: [],
-      completed: [],
-      deleted: [],
-      btn: {
-        act: false,
-        comp: false,
-        del: false,
-
-      }
-    }
-  },
 
   mounted() {
     if (localStorage.getItem('active') !== null) {
-      this.active = JSON.parse(localStorage.getItem('active'))
+      this.$store.state.tasks.active = JSON.parse(localStorage.getItem('active'))
     }
     if (localStorage.getItem('completed') !== null) {
-      this.completed = JSON.parse(localStorage.getItem('completed'))
+      this.$store.state.tasks.completed = JSON.parse(localStorage.getItem('completed'))
     }
     if (localStorage.getItem('deleted') !== null) {
-      this.deleted = JSON.parse(localStorage.getItem('deleted'))
+      this.$store.state.tasks.deleted = JSON.parse(localStorage.getItem('deleted'))
     }
-  },
-  watch: {
-    active(newVal) {
-      if (newVal.length !== 0) {
-        this.btn.act = true
-        this.$emit('btn', this.btn, this.active)
-      } else {
-        this.btn.act = false
-      }
-    },
-    completed(newVal) {
-      if (newVal.length !== 0) {
-        this.btn.comp = true
-        this.$emit('btn', this.btn,)
-      } else {
-        this.btn.comp = false
-      }
-    },
-    deleted(newVal) {
-      if (newVal.length !== 0) {
-        console.log(newVal)
-        this.btn.del = true
-        this.$emit('btn', this.btn)
-      } else {
-        this.btn.del = false
-      }
-    }
-
   },
 
   methods: {
-    addTask(event) {
-      console.log(event)
-      this.active.push({
-        text: event.inputTask,
-        id: Date.now(),
-        status: 'active',
-        categoriaName: event.categoriaData.name,
-        color: event.categoriaData.color
-      })
-      this.updateLocal('active')
-    },
-    checkedTask(ind, toPush, arr) {
-      this[arr] = this[arr].filter(el => {
-        if (el.id !== ind) {
-          return el
-        } else {
-          el.status = toPush
-          this[toPush].push(el)
-        }
-      })
-      this.updateLocal(arr)
-      this.updateLocal(toPush)
-    },
     showInput() {
-      if (this.statusWindow.actTaskShow) {
+      if (this.getStatusWindow.actTaskShow) {
         return 'act';
-      } else if (this.statusWindow.compTaskShow) {
+      } else if (this.getStatusWindow.compTaskShow) {
         return 'comp';
       } else {
         return 'del'
       }
     },
 
-    updateLocal(arg) {
-      localStorage.setItem(arg, JSON.stringify(this[arg]))
-    },
+
     clearList() {
-      this.deleted = [];
-      this.updateLocal('deleted');
+      this.$store.commit('clearList')
+      this.$store.commit('updateLocal', 'deleted')
     },
-    showBtnClear() {
-      if (this.statusWindow.delTaskShow && this.deleted.length !== 0) {
-        return true
-      } else {
-        return false
-      }
-    }
-
-
   }
 }
 </script>
