@@ -2,7 +2,6 @@
   <div class="todo">
     <to-do-categories/>
     <to-do-table-component/>
-
   </div>
 
 </template>
@@ -13,10 +12,6 @@ import ToDoTableComponent from "@/components/ToDoComponent/ToDoTable/ToDoTableCo
 export default {
   name: "ToDoViewComponent",
   components: {ToDoTableComponent, ToDoCategories},
-
-
-
-
 }
 </script>
 

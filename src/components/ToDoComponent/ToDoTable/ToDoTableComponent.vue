@@ -1,12 +1,10 @@
 <template>
   <div class="todo__table">
-    <to-do-table-input-component :input-show="showInput()"/>
-    <tasks-view-component v-if="getStatusWindow.actTaskShow" :tasks-list="getTasks.active"
-                           :check-show="showInput()"/>
-    <tasks-view-component v-if="getStatusWindow.compTaskShow" :tasks-list="getTasks.completed"
-                          :check-show="showInput()"/>
-    <tasks-view-component v-if="getStatusWindow.delTaskShow" :tasks-list="getTasks.deleted" :check-show="showInput()"/>
-    <button class="btn-clear" v-if="getTasks.deleted.length !== 0" @click="clearList">Clear list</button>
+    <to-do-table-input-component />
+    <tasks-view-component v-if="getStatusWindow.actTaskShow" :tasks-list="getTasks.active" />
+    <tasks-view-component v-if="getStatusWindow.compTaskShow" :tasks-list="getTasks.completed" />
+    <tasks-view-component v-if="getStatusWindow.delTaskShow" :tasks-list="getTasks.deleted" />
+    <button class="btn-clear" v-if="getTasks.deleted.length !== 0 && getStatusWindow.delTaskShow" @click="clearList">Clear list</button>
   </div>
 
 </template>
@@ -40,19 +38,7 @@ export default {
       this.$store.state.tasks.deleted = JSON.parse(localStorage.getItem('deleted'))
     }
   },
-
   methods: {
-    showInput() {
-      if (this.getStatusWindow.actTaskShow) {
-        return 'act';
-      } else if (this.getStatusWindow.compTaskShow) {
-        return 'comp';
-      } else {
-        return 'del'
-      }
-    },
-
-
     clearList() {
       this.$store.commit('clearList')
       this.$store.commit('updateLocal', 'deleted')

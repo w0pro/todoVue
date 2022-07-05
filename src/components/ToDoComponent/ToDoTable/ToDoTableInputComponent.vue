@@ -45,9 +45,6 @@ export default {
     }
   },
 
-
-
-
   methods: {
     taskTransfer () {
       if (this.newTask.inputTask) {
@@ -56,6 +53,7 @@ export default {
           id: Date.now(),
           status: 'active',
         } )
+        this.$store.commit('switchWindow', 'actTaskShow')
         this.$store.commit('updateLocal', 'active')
         this.newTask.inputTask = '';
       } else {

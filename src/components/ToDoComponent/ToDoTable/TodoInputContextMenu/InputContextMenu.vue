@@ -51,7 +51,6 @@ export default {
     },
     transferCategoria() {
       this.$store.commit('transferCategoria', this.categoria)
-
       this.categoria.color = '',
       this.categoria.name = ''
     }
