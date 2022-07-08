@@ -5,6 +5,14 @@
       <button class="button__categories" v-if="getTasks.completed.length !== 0" @click="switchWindow('compTaskShow')">Completed</button>
       <button class="button__categories" v-if="getTasks.deleted.length !== 0" @click="switchWindow('delTaskShow')">Deleted</button>
     </div>
+    <div>
+      <ul>
+        <li class="categoria__item" v-for="item in filterCategoria"  :key="item.id">
+            <div class="color-block" :style="item.color"></div>
+            <p>{{item.categoria}}</p>
+        </li>
+      </ul>
+    </div>
   </div>
 
 </template>
@@ -15,12 +23,19 @@ export default {
   computed:{
     getTasks() {
       return this.$store.getters.getTasks
+    },
+    filterCategoria () {
+      return this.$store.getters.filterCategoria
     }
   },
   methods: {
     switchWindow(arg) {
       this.$store.commit('switchWindow', arg)
-    }
+    },
+  //   filterCategoria () {
+  //     let arrCat = this.getTasks.active.map((el) => el.categoria.length !== 0)
+  //     console.log(arrCat)
+  //   }
   }
 
 }
@@ -61,6 +76,23 @@ export default {
 .button__categories:active {
   color: black;
   background-color: #c0bbc5;
+}
+
+.color-block {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.categoria__item {
+  font-family: 'Inconsolata', monospace;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  padding: 15px;
 }
 
 </style>

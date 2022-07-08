@@ -54,7 +54,6 @@ export default {
   display: flex;
   list-style: none;
   padding: 15px;
-  border-radius: 10px;
 }
 
 .btn-del {

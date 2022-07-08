@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    statusContextMenu: true,
-    categoria: {
-      name: '',
-      color: ''
-    },
+    statusContextMenu: false,
     tasks: {
       active: [],
       completed: [],
@@ -32,17 +30,25 @@ export default new Vuex.Store({
     },
     getStatusWindow(state) {
      return state.statusWindow
+    },
+
+    filterCategoria(state) {
+       let arrCat = []
+        state.tasks.active.forEach(el => {
+        if (el.categoria || el.color) {
+            arrCat.push(el)
+        }
+    })
+      return arrCat
+
     }
   },
   mutations: {
     eventOpenContext(state) {
-      state.statusContextMenu = true
+      state.statusContextMenu = !state.statusContextMenu
     },
     eventCloseContext(state){
       state.statusContextMenu = false
-    },
-    transferCategoria (state, payload) {
-      state.categoria = payload
     },
 
     clearList(state) {
@@ -72,7 +78,6 @@ export default new Vuex.Store({
     switchWindow (state, payload) {
      for (let key in state.statusWindow) {
        if (key === payload){
-         console.log(key)
          state.statusWindow[key] = true
        } else {
          state.statusWindow[key] = false
