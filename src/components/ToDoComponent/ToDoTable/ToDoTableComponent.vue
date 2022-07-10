@@ -1,10 +1,10 @@
 <template>
   <div class="todo__table">
     <to-do-table-input-component />
-    <tasks-view-component v-if="getStatusWindow.actTaskShow" :tasks-list="getTasks.active" />
-    <tasks-view-component v-if="getStatusWindow.compTaskShow" :tasks-list="getTasks.completed" />
-    <tasks-view-component v-if="getStatusWindow.delTaskShow" :tasks-list="getTasks.deleted" />
-    <button class="btn-clear" v-if="getTasks.deleted.length !== 0 && getStatusWindow.delTaskShow" @click="clearList">Clear list</button>
+    <transition name="show" mode="out-in">
+      <tasks-view-component v-if="getStatusWindow[getKey]" :tasks-list="getTasks[getKey]"  key="{{getKey}}"/>
+    </transition>
+    <button class="btn-clear" v-if="getTasks.deleted.length !== 0 && getStatusWindow.deleted" @click="clearList">Clear list</button>
   </div>
 
 </template>
@@ -19,14 +19,15 @@ export default {
 
   computed: {
     getTasks() {
-      return this.$store.getters.getTasks
+      return this.$store.getters.getTasks;
     },
     getStatusWindow() {
-      return this.$store.getters.getStatusWindow
+      return this.$store.getters.getStatusWindow;
+    },
+    getKey() {
+      return this.$store.getters.getKey;
     }
   },
-
-
   mounted() {
     if (localStorage.getItem('active') !== null) {
       this.$store.state.tasks.active = JSON.parse(localStorage.getItem('active'))
@@ -36,6 +37,14 @@ export default {
     }
     if (localStorage.getItem('deleted') !== null) {
       this.$store.state.tasks.deleted = JSON.parse(localStorage.getItem('deleted'))
+    }
+    if (localStorage.getItem('categorias') !== null) {
+      this.$store.state.tasks.categorias = JSON.parse(localStorage.getItem('categorias'))
+    }
+  },
+  data() {
+    return{
+      key: 'active'
     }
   },
   methods: {
@@ -78,6 +87,15 @@ export default {
 .btn-clear:active {
   color: black;
   background-color: #c0bbc5;
+}
+
+
+
+.show-enter-active, .show-leave-active {
+  transition: opacity .5s;
+}
+.show-enter, .show-leave-to  {
+  opacity: 0;
 }
 
 </style>

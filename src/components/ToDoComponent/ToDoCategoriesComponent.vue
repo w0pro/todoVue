@@ -1,13 +1,13 @@
 <template>
   <div class="todo__categories">
     <div class="categories__wrapper">
-      <button class="button__categories" v-if="getTasks.active.length !== 0" @click="switchWindow('actTaskShow')">Active</button>
-      <button class="button__categories" v-if="getTasks.completed.length !== 0" @click="switchWindow('compTaskShow')">Completed</button>
-      <button class="button__categories" v-if="getTasks.deleted.length !== 0" @click="switchWindow('delTaskShow')">Deleted</button>
+      <button class="button__categories" v-if="getTasks.active.length !== 0" @click="switchWindow('active')">Active</button>
+      <button class="button__categories" v-if="getTasks.completed.length !== 0" @click="switchWindow('completed')">Completed</button>
+      <button class="button__categories" v-if="getTasks.deleted.length !== 0" @click="switchWindow('deleted')">Deleted</button>
     </div>
     <div>
       <ul>
-        <li class="categoria__item" v-for="item in filterCategoria"  :key="item.id">
+        <li class="categoria__item" v-for="item in getCategorias"  :key="item.id" @click="switchWindow(item.categoria)">
             <div class="color-block" :style="item.color"></div>
             <p>{{item.categoria}}</p>
         </li>
@@ -24,18 +24,15 @@ export default {
     getTasks() {
       return this.$store.getters.getTasks
     },
-    filterCategoria () {
-      return this.$store.getters.filterCategoria
+    getCategorias(){
+      return this.$store.getters.getCategorias
     }
   },
   methods: {
     switchWindow(arg) {
       this.$store.commit('switchWindow', arg)
     },
-  //   filterCategoria () {
-  //     let arrCat = this.getTasks.active.map((el) => el.categoria.length !== 0)
-  //     console.log(arrCat)
-  //   }
+
   }
 
 }

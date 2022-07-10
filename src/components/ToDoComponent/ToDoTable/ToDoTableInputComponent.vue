@@ -1,7 +1,7 @@
 <template>
   <div class="table-input" >
-    <input :id="inputcrop" type="text" class="fix input" v-model.trim.lazy="newTask.text" :placeholder="placeholder" v-on:keyup.enter="taskTransfer" >
-    <label :for="inputcrop" class="btn-add-context" @click="showMenu">
+    <input id="inputSvg" type="text" class="fix input" v-model.trim.lazy="newTask.text" :placeholder="placeholder" v-on:keyup.enter="taskTransfer" >
+    <label for="inputSvg" class="btn-add-context" @click="showMenu">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" >
         <path d="M128,26A102,102,0,1,0,230,128,102.1153,102.1153,0,0,0,128,26Zm0,192a90,90,0,1,1,90-90A90.10217,90.10217,0,0,1,128,218Zm10-90a10,10,0,1,1-10-10A10.01146,10.01146,0,0,1,138,128Zm48,0a10,10,0,1,1-10-10A10.01177,10.01177,0,0,1,186,128Zm-96,0a10,10,0,1,1-10-10A10.01146,10.01146,0,0,1,90,128Z" fill="#81776f"/>
       </svg>
@@ -16,8 +16,11 @@
 
 
 import InputContextMenu from "@/components/ToDoComponent/ToDoTable/TodoInputContextMenu/InputContextMenu";
+import {placeholderReaction} from "@/components/mixins/placeholderReaction";
+
 export default {
   name: "ToDoTableInputComponent",
+  mixins:[placeholderReaction],
   components: {InputContextMenu},
   computed: {
     statusContext(){
@@ -28,16 +31,16 @@ export default {
     return {
       newTask: {
         text : '',
-        categoria:'',
-        color: '',
+        categoria: '',
+        color: ''
       },
-      inputcrop: '1',
       placeholder: 'Add a new task insdie ‘All’ category',
     }
   },
   methods: {
     taskTransfer () {
       if (this.newTask.text) {
+        this.newTask.categoria? this.$store.commit('addCountCat'):'';
         this.$store.commit('addParamActive', {
           text:this.newTask.text,
           categoria:this.newTask.categoria,
@@ -46,12 +49,11 @@ export default {
           color: this.newTask.color
         } )
 
-        this.$store.commit('switchWindow', 'actTaskShow')
+        this.$store.commit('switchWindow', 'active')
         this.$store.commit('updateLocal', 'active')
         this.newTask = {};
       } else {
-        setTimeout(() => this.placeholder = 'You cannot add an empty task!!!', 300)
-        setTimeout(() => this.placeholder = 'Add a new task insdie ‘All’ category', 1000)
+        this.placeholder = this.placeholderReaction('You cannot add an empty task!!!', this.placeholder)
       }
     },
     showMenu(event) {
@@ -60,8 +62,9 @@ export default {
       }
     },
     transferCategoria(event){
-      this.newTask.color = event.color;
-      this.newTask.categoria = event.name
+      console.log(event)
+      this.newTask.categoria = event.name;
+      this.newTask.color = event.color
     }
   },
 }
