@@ -1,5 +1,10 @@
 deploy https://spectacular-fenglisu-d8fc29.netlify.app/
 
+
+Сверху ссылка на развернутое приложение 
+
+У меня был готовый код, иногда занимаюсь этим приложением, поэтому отправил его
+
 # todo
 
 ## Project setup
